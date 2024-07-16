@@ -118,10 +118,8 @@ jobs:
         - name: Set up Docker
           run: |
             docker-compose up -d
-            sleep 20  # Ensure services are up and running
 
-        - name: Wait for application to be fully running
-          run: sleep 30
+
 
         - name: Post initial data
           run: |
@@ -139,7 +137,7 @@ jobs:
             do
               RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:5001/books${line}")
               if [[ "$RESPONSE" =~ ^2 ]]; then
-                JSON=$(curl -s "http://localhost:5001/books${line}")
+                JSON=$(curl -s "http://localhost:5001/books/${line}")
                 echo -e "query: $line\nresponse: $JSON" >> response.txt
               else
                 echo -e "query: $line\nresponse: error $RESPONSE" >> response.txt
