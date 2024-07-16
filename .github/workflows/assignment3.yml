@@ -55,11 +55,6 @@ jobs:
         run: docker load -i mybooks-image/mybooks.tar
       - name : check images
         run : docker images
-      - name: Verify test script
-        run: |
-            echo "Verifying test script:"
-            ls -l tests/assn3_tests.py
-            file tests/assn3_tests.py
       - name: Set up Docker Compose
         run: |
           docker-compose up -d
@@ -116,9 +111,14 @@ jobs:
         - name: Download all artifacts
           uses: actions/download-artifact@v4
 
+        - name: Load Docker image
+          run: docker load -i mybooks-image/mybooks.tar
+
+
         - name: Set up Docker
           run: |
             docker-compose up -d
+            sleep 20  # Ensure services are up and running
 
         - name: Wait for application to be fully running
           run: sleep 30
