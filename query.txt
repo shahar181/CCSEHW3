@@ -1,5 +1,5 @@
 ?genre=Fiction
-?ISBN=9780520343641
+?ISBN=97805203436
 ?title=Adventures%20of%20Huckleberry%20Finn
 ?publishedDate=2021-09-21
 ?publisher=Univ%20of%20California%20Press
