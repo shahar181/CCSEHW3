@@ -49,9 +49,10 @@ jobs:
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
-
+      - name: List downloaded artifacts
+        run: ls -lR
       - name: Load Docker image
-        run: docker load -i /tmp/mybooks.tar
+        run: docker load -i mybooks-image/mybooks.tar
       - name : check images
         run : docker images ls
       - name: Set up Docker Compose
@@ -59,16 +60,16 @@ jobs:
           docker-compose up -d
           sleep 20  # Ensure services are up and running
           if [ $? -eq 0 ]; then
-            echo "Container up and running" >> /tmp/log.txt
+            echo "Container up and running" >> log-file/log.txt
           else
-            echo "Container failed to run" >> /tmp/log.txt
+            echo "Container failed to run" >> log-file/log.txt
       - name: Run tests
         run: |
           docker-compose exec books pytest -v tests/assn3_tests.py > /tmp/assn3_test_results.txt
           if [ $? -eq 0 ]; then
-            echo "tests succeeded" >> /tmp/log.txt
+            echo "tests succeeded" >> log-file/log.txt
           else
-            echo "tests failed" >> /tmp/log.txt
+            echo "tests failed" >> log-file/log.txt
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
