@@ -92,8 +92,7 @@ jobs:
       - name: Run tests
         run: |
           cd tests
-          ls -l 
-          pytest -v assn3_tests.py 
+          pytest -v assn3_tests.py > /tmp/assn3_test_results.txt
 
 
       - name: Upload test results
