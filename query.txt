@@ -1,0 +1,4 @@
+?genre=Fiction
+?ISBN=9780385050784
+?title=Adventures of Huckleberry Finn
+?genre=Science Fiction&title=I, Robot
