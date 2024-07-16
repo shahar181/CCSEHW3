@@ -80,19 +80,14 @@ jobs:
       - name: Ensure test scripts are executable
         run: chmod +x tests/*.py
 
-      - name: Check Python and pytest version
-        run: |
-          python --version
-          pytest --version
-      - name: List current directory contents
-        run: |
-            pwd
-            ls -la
-
       - name: Run tests
         run: |
           cd tests
-          pytest -v assn3_tests.py > /tmp/assn3_test_results.txt
+          pytest -v assn3_tests.py > assn3_test_results.txt
+          if [ $? -eq 0 ]; then
+            echo "tests succeeded" >> ../log-file/log.txt
+          else
+            echo "tests failed" >> ../log-file/log.txt
 
 
       - name: Upload test results

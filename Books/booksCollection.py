@@ -88,6 +88,9 @@ class BooksCollection:
             logging.error("No book found for ID: {}".format(book_id))
             raise NotFoundError("Book not found")  # Ensure this is raised
 
+        book["id"] = str(book["_id"])
+        del book["_id"]
+
         return book
 
 

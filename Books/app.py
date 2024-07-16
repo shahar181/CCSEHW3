@@ -68,7 +68,7 @@ def get_book(book_id):
     except Exception as e:  # Catch any other exceptions that may occur
         print("********")
         logging.error(f"An error occurred: {str(e)}")
-        return jsonify({"error": "An internal error occurred"}), 500
+        return jsonify({f"error: {str(e)}"}), 500
 
 
 # DELETE /books/<id> to delete a specific book
@@ -165,7 +165,6 @@ def get_top_books():
     return jsonify(ratings_list), 200
 
 
-
 # POST /ratings/<book_id>/values to add a new rating value
 @app.route('/ratings/<book_id>/values', methods=['POST'])
 def add_book_rating(book_id):
@@ -183,6 +182,8 @@ def add_book_rating(book_id):
             return jsonify({"error": str(e)}), 422
         except NotFoundError as e:
             return jsonify({"error": str(e)}), 404
+
+
 # Get the port number from the environment variable, default to 5001
 port = int(os.getenv('PORT', 5001))
 if __name__ == '__main__':

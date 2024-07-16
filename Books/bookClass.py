@@ -27,13 +27,12 @@ class Book:
     def fetch_details_from_apis(self):
         """Fetch book details from external APIs."""
         # Fetch details from Google Books API
-        response = self.fetch_google_books()
-        if response.get("totalItems") == 0 or not response:
-            raise ValueError("No data available for this book")
+        self.fetch_google_books()
+
         # Fetch languages from Open Library
-        #self.languages = self.fetch_book_languages()
+        # self.languages = self.fetch_book_languages()
         # Fetch summary using ChatGPT
-        #self.fetch_summary()
+        # self.fetch_summary()
 
     # Function to fetch book details from Google Books API
     def fetch_google_books(self):
@@ -44,11 +43,16 @@ class Book:
             if response.status_code != 200:
                 raise APIServiceError("Unable to connect to Google Books API")
 
-            if response.json()['totalItems'] == 0 or not bool(response.json()):
+            if not bool(response.json()) or response.json()['totalItems'] == 0:
                 raise GoogleBooksAPINotFoundError("ISBN not found in Google Books API")
 
+            json_response = response.json()
+            if not bool(json_response) or json_response['totalItems'] == 0:
+                raise GoogleBooksAPINotFoundError("ISBN not found in Google Books API")
 
             book_data = response.json()['items'][0]['volumeInfo']
+            print(book_data)
+
             self.authors = " and ".join(book_data.get("authors", [])) if book_data.get("authors") else "missing"
             self.publisher = book_data.get("publisher", "missing")
             self.publishedDate = book_data.get("publishedDate", "missing")
