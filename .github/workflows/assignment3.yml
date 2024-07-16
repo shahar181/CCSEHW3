@@ -13,21 +13,26 @@ jobs:
         run: echo "$(date -Iminutes)" > log.txt
 
       - name: Log submitter names
-        run: echo "Shahar kronenfeld and Aviv sharon" >> log.txt
+        run: echo "Shahar Kronenfeld, Aviv Sharon" >> log.txt
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v4
 
       - name: Build Docker image
-        id: build
         run: |
-            docker buildx build --platform linux/amd64 -t mybooks:latest --load ./Books
-            if [ $? -eq 0 ]; then
-              echo "image successfully built" >> log.txt
-            else
-              echo "image not able to be built" >> log.txt
-              exit 1
-            fi
+          docker buildx build --platform linux/amd64 -t mybooks:latest --output type=docker,dest=/tmp/mybooks.tar ./Books
+          if [ $? -eq 0 ]; then
+            echo "image successfully built" >> log.txt
+          else
+            echo "image not able to be built" >> log.txt
+            exit 1
+          fi
+
+      - name: Upload Docker image as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mybooks-image
+          path: /tmp/mybooks.tar
 
       - name: Upload log file after build
         if: always()
@@ -36,5 +41,42 @@ jobs:
           name: log-file
           path: log.txt
 
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
 
+      - name: Load Docker image
+        run: docker load -i /tmp/mybooks.tar
+      - name: Set up Docker Compose
+        run: |
+          docker-compose up -d
+          sleep 20  # Ensure services are up and running
+          if [ $? -eq 0 ]; then
+            echo "Container up and running" >> /tmp/log.txt
+          else
+            echo "Container failed to run" >> /tmp/log.txt
+      - name: Run tests
+        run: |
+          docker-compose exec books pytest -v tests/assn3_tests.py > /tmp/assn3_test_results.txt
+          if [ $? -eq 0 ]; then
+            echo "tests succeeded" >> /tmp/log.txt
+          else
+            echo "tests failed" >> /tmp/log.txt
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: assn3_test_results.txt
+
+      - name: Upload log file after test
+        uses: actions/upload-artifact@v4
+        with:
+          name: log-file
+          path: log.txt
