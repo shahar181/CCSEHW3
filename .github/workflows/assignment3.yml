@@ -54,7 +54,7 @@ jobs:
       - name: Load Docker image
         run: docker load -i mybooks-image/mybooks.tar
       - name : check images
-        run : docker images ls
+        run : docker image ls
       - name: Set up Docker Compose
         run: |
           docker-compose up -d
