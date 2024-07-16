@@ -80,6 +80,11 @@ jobs:
       - name: Ensure test scripts are executable
         run: chmod +x tests/*.py
 
+      - name: Check Python and pytest version
+        run: |
+          python --version
+          pytest --version
+
       - name: Run tests
         run: |
           cd tests
