@@ -135,9 +135,11 @@ jobs:
             touch response.txt
             while IFS= read -r line
             do
+              echo "Processing line: $line"  # Print the query being processed
               RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:5001/books${line}")
+              echo "HTTP Status: $RESPONSE"  # Print the HTTP status received
               if [[ "$RESPONSE" =~ ^2 ]]; then
-                JSON=$(curl -s "http://localhost:5001/books/${line}")
+                JSON=$(curl -s "http://localhost:5001/books${line}")
                 echo -e "query: $line\nresponse: $JSON" >> response.txt
               else
                 echo -e "query: $line\nresponse: error $RESPONSE" >> response.txt
