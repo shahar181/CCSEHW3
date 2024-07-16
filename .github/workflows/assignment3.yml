@@ -58,7 +58,7 @@ jobs:
       - name: Set up Docker Compose
         run: |
           docker-compose up -d
-          sleep 20  # Ensure services are up and running
+          sleep 1  # Ensure services are up and running
           if [ $? -eq 0 ]; then
             echo "Container up and running" >> log-file/log.txt
           else
@@ -118,7 +118,7 @@ jobs:
         - name: Set up Docker
           run: |
             docker-compose up -d
-            sleep 20  # Ensure services are up and running
+            sleep 1  # Ensure services are up and running
 
 
         - name: Post initial data
@@ -135,7 +135,6 @@ jobs:
             touch response.txt
             while IFS= read -r line
             do
-              echo "Processing line: $line"  # Print the query being processed
               RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:5001/books${line}")
               echo "HTTP Status: $RESPONSE"  # Print the HTTP status received
               if [[ "$RESPONSE" =~ ^2 ]]; then
@@ -147,7 +146,7 @@ jobs:
             done < query.txt
 
         - name: Upload response file
-
+          if: always()
           uses: actions/upload-artifact@v4
           with:
             name: response-results
