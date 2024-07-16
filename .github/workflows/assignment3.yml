@@ -63,7 +63,7 @@ jobs:
       - name: Set up Docker Compose
         run: |
           docker-compose up -d
-          # sleep 20  # Ensure services are up and running
+          sleep 20  # Ensure services are up and running
           if [ $? -eq 0 ]; then
             echo "Container up and running" >> log-file/log.txt
           else
@@ -84,6 +84,10 @@ jobs:
         run: |
           python --version
           pytest --version
+      - name: List current directory contents
+        run: |
+            pwd
+            ls -la
 
       - name: Run tests
         run: |
