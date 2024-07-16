@@ -77,9 +77,6 @@ jobs:
             pip install pytest requests
             if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Ensure test scripts are executable
-        run: chmod +x tests/*.py
-
       - name: Run tests
         run: |
           cd tests
@@ -109,3 +106,48 @@ jobs:
           name: log-file
           path: log-file/log.txt
           overwrite: true
+  query:
+       runs-on: ubuntu-latest
+       needs: test
+       steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Download all artifacts
+          uses: actions/download-artifact@v4
+
+        - name: Set up Docker
+          run: |
+            docker-compose up -d
+
+        - name: Wait for application to be fully running
+          run: sleep 30
+
+        - name: Post initial data
+          run: |
+            curl -X POST http://localhost:5001/books -H "Content-Type: application/json" -d '{"title":"Adventures of Huckleberry Finn", "ISBN":"9780520343641", "genre":"Fiction"}'
+            curl -X POST http://localhost:5001/books -H "Content-Type: application/json" -d '{"title":"The Best of Isaac Asimov", "ISBN":"9780385050784", "genre":"Science Fiction"}'
+            curl -X POST http://localhost:5001/books -H "Content-Type: application/json" -d '{"title":"Fear No Evil", "ISBN":"9780394558783", "genre":"Biography"}'
+            curl -X POST http://localhost:5001/books -H "Content-Type: application/json" -d '{"title":"The Adventures of Tom Sawyer", "ISBN":"9780195810400", "genre":"Fiction"}'
+            curl -X POST http://localhost:5001/books -H "Content-Type: application/json" -d '{"title":"I, Robot", "ISBN":"9780553294385", "genre":"Science Fiction"}'
+            curl -X POST http://localhost:5001/books -H "Content-Type: application/json" -d '{"title":"Second Foundation", "ISBN":"9780553293364", "genre":"Science Fiction"}'
+
+        - name: Perform queries and generate response file
+          run: |
+            touch response.txt
+            while IFS= read -r line
+            do
+              RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:5001/books${line}")
+              if [[ "$RESPONSE" =~ ^2 ]]; then
+                JSON=$(curl -s "http://localhost:5001/books${line}")
+                echo -e "query: $line\nresponse: $JSON" >> response.txt
+              else
+                echo -e "query: $line\nresponse: error $RESPONSE" >> response.txt
+              fi
+            done < query.txt
+
+        - name: Upload response file
+          uses: actions/upload-artifact@v4
+          with:
+            name: response-results
+            path: response.txt
