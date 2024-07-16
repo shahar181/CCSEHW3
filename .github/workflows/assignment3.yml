@@ -77,9 +77,9 @@ jobs:
           cd tests
           pytest -v assn3_tests.py > /tmp/assn3_test_results.txt
           if [ $? -eq 0 ]; then
-            echo "tests succeeded" >> log.txt
+            echo "tests succeeded" >> log-file/log.txt
           else
-            echo "tests failed" >> log.txt
+            echo "tests failed" >> log-file/log.txt
             exit 1
           fi
 
@@ -95,4 +95,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: log-file
-          path: log.txt
+          path: log-file/log.txt
