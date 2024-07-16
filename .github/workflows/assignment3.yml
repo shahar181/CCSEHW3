@@ -55,10 +55,15 @@ jobs:
         run: docker load -i mybooks-image/mybooks.tar
       - name : check images
         run : docker images
+      - name: Verify test script
+        run: |
+            echo "Verifying test script:"
+            ls -l tests/assn3_tests.py
+            file tests/assn3_tests.py
       - name: Set up Docker Compose
         run: |
           docker-compose up -d
-          sleep 20  # Ensure services are up and running
+          # sleep 20  # Ensure services are up and running
           if [ $? -eq 0 ]; then
             echo "Container up and running" >> log-file/log.txt
           else
