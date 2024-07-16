@@ -85,8 +85,8 @@ jobs:
           cd tests
           set +e  
           pytest -v assn3_tests.py > ../assn3_test_results.txt
-          set -e
           TEST_RESULT=$?
+          set -e
           if [ $TEST_RESULT -eq 0 ]; then
               echo "tests succeeded" >> ../log-file/log.txt
           else
