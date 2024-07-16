@@ -83,8 +83,15 @@ jobs:
       - name: Run tests
         run: |
           cd tests
-          pytest -v assn3_tests.py > ../assn3_test_results.txt || (echo "tests failed" >> ../log-file/log.txt && exit 1)
-          echo "tests succeeded" >> ../log-file/log.txt
+         pytest -v assn3_tests.py > ../assn3_test_results.txt
+         TEST_RESULT=$?
+         if [ $TEST_RESULT -eq 0 ]; then
+            echo "tests succeeded" >> ../log-file/log.txt
+         else
+            echo "tests failed" >> ../log-file/log.txt
+            exit 1
+         fi
+
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
