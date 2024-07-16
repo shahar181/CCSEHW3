@@ -78,7 +78,7 @@ jobs:
       - name: Run tests
         run: |
           cd tests
-         if [ -f assn3_tests.py ]; then
+           if [ -f assn3_tests.py ]; then
             pytest -v assn3_tests.py > /tmp/assn3_test_results.txt
             if [ $? -eq 0 ]; then
               echo "tests succeeded" >> ../log.txt
@@ -91,6 +91,8 @@ jobs:
             echo "Test file not found" >> ../log.txt
             exit 1
           fi
+
+
 
       - name: Upload test results
         uses: actions/upload-artifact@v3
