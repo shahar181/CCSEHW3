@@ -93,7 +93,7 @@ jobs:
         run: |
           cd tests
           ls -l 
-
+          pytest -v assn3_tests.py 
 
 
       - name: Upload test results
