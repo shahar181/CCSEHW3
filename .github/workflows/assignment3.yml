@@ -83,13 +83,15 @@ jobs:
       - name: Run tests
         run: |
           cd tests
+          set +e  
           pytest -v assn3_tests.py > ../assn3_test_results.txt
+          set -e
           TEST_RESULT=$?
           if [ $TEST_RESULT -eq 0 ]; then
               echo "tests succeeded" >> ../log-file/log.txt
           else
               echo "tests failed" >> ../log-file/log.txt
-             exit 1
+              exit 1
           fi
           
 
