@@ -118,7 +118,7 @@ jobs:
         - name: Set up Docker
           run: |
             docker-compose up -d
-
+            sleep 20  # Ensure services are up and running
 
 
         - name: Post initial data
