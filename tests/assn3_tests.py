@@ -2,7 +2,7 @@ import requests
 
 base_url = "http://localhost:5001"
 
-book1 = {"title": "Adventures of Huckleberry Finn", "ISBN": "978052034364", "genre": "Fiction"}
+book1 = {"title": "Adventures of Huckleberry Finn", "ISBN": "9780520343641", "genre": "Fiction"}
 book2 = {"title": "The Best of Isaac Asimov", "ISBN": "9780385050784", "genre": "Science Fiction"}
 book3 = {"title": "Fear No Evil", "ISBN": "9780394558783", "genre": "Biography"}
 book4 = {"title": "No such book", "ISBN": "0000001111111", "genre": "Biography"}
