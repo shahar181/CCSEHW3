@@ -37,6 +37,13 @@ class BooksCollection:
         new_book = Book(title, ISBN, genre)
         book_data = new_book.get_json()
         result = self.books_collection.insert_one(book_data)
+        rating_data = {
+            "id": str(result.inserted_id),
+            "values": [],
+            "average": 0.0,
+            "title": title
+        }
+        self.ratings_collection.insert_one(rating_data)
         return str(result.inserted_id)
 
     def delete_book(self, book_id):
@@ -49,7 +56,7 @@ class BooksCollection:
         result = self.books_collection.delete_one({"_id": object_id})
         if result.deleted_count == 0:
             raise NotFoundError("Book not found")
-        self.ratings_collection.delete_one({"book_id": object_id})
+        self.ratings_collection.delete_one({"id": book_id})
 
     def update_book(self, id, title, ISBN, genre, authors, publisher, publishedDate):
         """Update an existing book in the collection."""
@@ -108,18 +115,11 @@ class BooksCollection:
 
     def get_rating(self, book_id):
         """Retrieve the rating for a specific book."""
-        try:
-            logging.debug("Trying to convert book_id to ObjectId")
-            oid = ObjectId(book_id)
-        except InvalidId:
-            logging.error("Invalid book ID provided")
-            raise NotFoundError("Rating not found for invalid book ID")
-
-        logging.debug(f"Searching for rating with book_id: {oid}")
-        rating = self.ratings_collection.find_one({"book_id": oid})
+        rating = self.ratings_collection.find_one({"id": book_id})
         if not rating:
             logging.error("No rating found for book_id")
             raise NotFoundError("Rating not found")
+        del rating["_id"]
 
         return rating
 
@@ -137,10 +137,10 @@ class BooksCollection:
         except InvalidId:
             raise NotFoundError("Invalid book ID")
 
-        rating = self.ratings_collection.find_one({"book_id": ObjectId(book_id)})
+        rating = self.ratings_collection.find_one({"id": book_id})
         if not rating:
             rating_data = {
-                "book_id": ObjectId(book_id),
+                "id": book_id,
                 "values": [value],
                 "average": value,
                 "title": self.get_book(book_id)['title']
@@ -152,14 +152,10 @@ class BooksCollection:
         values.append(value)
         new_average = round(sum(values) / len(values), 2)
         self.ratings_collection.update_one(
-            {"book_id": ObjectId(book_id)},
+            {"id": book_id},
             {"$set": {"values": values, "average": new_average}}
         )
         return new_average
-
-
-
-
 
     def update_top_ratings(self):
         # Fetch all books with ratings

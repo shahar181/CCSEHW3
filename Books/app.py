@@ -135,7 +135,7 @@ def get_all_ratings():
         # Fetch all ratings
         ratings = books.get_all_ratings()
         ratings_list = [{
-            'id': str(rating['book_id']),
+            'id': str(rating['id']),
             'title': rating['title'],
             'values': rating['values'],
             'average': rating['average']
@@ -158,7 +158,7 @@ def get_rating(book_id):
 def get_top_books():
     top_ratings = books.get_top_ratings()
     ratings_list = [{
-        'id': str(rating['book_id']),
+        'id': str(rating['id']),
         'title': rating['title'],
         'average': rating['average']
     } for rating in top_ratings]
