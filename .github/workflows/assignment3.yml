@@ -150,7 +150,6 @@ jobs:
               rm temp_response.txt  # Clean up the temporary file
               done < query.txt
          
-            done < query.txt
 
         - name: Shut down Docker Compose
           if: always()
