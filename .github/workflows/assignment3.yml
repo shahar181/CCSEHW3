@@ -37,7 +37,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: log-file
+          name: log
           path: log.txt
 
   test:
@@ -60,9 +60,9 @@ jobs:
           docker-compose up -d
           sleep 5  # Ensure services are up and running
           if [ $? -eq 0 ]; then
-            echo "Container up and running" >> log-file/log.txt
+            echo "Container up and running" >> log/log.txt
           else
-            echo "Container failed to run" >> log-file/log.txt
+            echo "Container failed to run" >> log/log.txt
             exit 1
           fi
 
@@ -80,9 +80,9 @@ jobs:
           TEST_RESULT=$?
           set -e
           if [ $TEST_RESULT -eq 0 ]; then
-              echo "tests succeeded" >> ../log-file/log.txt
+              echo "tests succeeded" >> ../log/log.txt
           else
-              echo "tests failed" >> ../log-file/log.txt
+              echo "tests failed" >> ../log/log.txt
               exit 1
           fi
 
@@ -94,15 +94,15 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-results
+          name: assn3_test_results
           path: assn3_test_results.txt
 
       - name: Upload log file after test
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: log-file
-          path: log-file/log.txt
+          name: log
+          path: log/log.txt
           overwrite: true
   query:
        runs-on: ubuntu-latest
@@ -156,5 +156,5 @@ jobs:
           if: always()
           uses: actions/upload-artifact@v4
           with:
-            name: response-results
+            name: response
             path: response.txt
