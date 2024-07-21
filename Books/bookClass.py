@@ -6,10 +6,6 @@ from costomExeptions import *
 from openai import OpenAI
 import os
 
-client = OpenAI(
-    # defaults to os.environ.get("OPENAI_API_KEY")
-    api_key="sk-proj-qunxsyROD9bSsxFzi8nGT3BlbkFJxmkIKXLpAMRdShBWmZXh"
-)
 
 
 class Book:
