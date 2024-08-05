@@ -50,7 +50,7 @@ def test_get_all_books():
         test_add_books()
 
     response = requests.get(f"{base_url}/books")
-    assert response.status_code == 404
+    assert response.status_code == 200
     data = response.json()
     assert len(data) == 3
 
