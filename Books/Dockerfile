@@ -1,5 +1,5 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
-# FROM python:alpine3.17
+FROM python:alpine3.17
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
