@@ -1,11 +1,5 @@
-?genre=Fiction
-?ISBN=9780520343641
-?title=Adventures%20of%20Huckleberry%20Finn
-?publishedDate=2021-09-21
-?publisher=Univ%20of%20California%20Press
-?genre=Science%20Fiction&publishedDate=1991-11-01
-?genre=Biography&title=Fear%20No%20Evil
-?genre=Science%20Fiction&publisher=Doubleday%20Books
-?genre=Fiction&publishedDate=1977
-?authors=Isaac%20Asimov&publishedDate=1991-11-01
-?title=I,%20Robot&ISBN=9780553294385
+?authors=Mark Twain
+?ISBN=9780553293364
+?genre=Science Fiction
+?genre=Science Fiction&title=I, Robot
+?publishedDate=1948
